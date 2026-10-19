@@ -78,6 +78,12 @@ Open `skills/phone-mockup-board/assets/board-template.html` and edit the `CONFIG
 | `data-go="screenId"` | scrolls the board to that phone |
 | `data-back` | scrolls back to the first home phone |
 
+## What it runs and connects to
+
+- **The skill itself** is plain instructions plus an HTML template. It has no hooks, MCP servers, scripts, package installs or API calls, and it collects, stores or sends no data.
+- **The pages it generates** are static HTML files on your machine (or published wherever you choose). By default they load the Figtree font from Google Fonts (`fonts.googleapis.com`, `fonts.gstatic.com`). Any outbound links in a board, such as a WhatsApp share link or a YouTube link, are ones you or the agent put there, and they open only when the viewer clicks them.
+- **Shade choice.** A generated board remembers the viewer's colour choice in the browser's `localStorage` on that device only.
+
 ## Contributing
 
 Contributions are welcome! `main` is protected, so all changes land through pull requests.
