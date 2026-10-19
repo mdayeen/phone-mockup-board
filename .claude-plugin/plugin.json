@@ -1,0 +1,14 @@
+{
+  "name": "phone-mockup-board",
+  "displayName": "Phone Mockup Board",
+  "version": "1.0.0",
+  "description": "Builds a single-file HTML board of interactive phone mockups side by side: each phone scrolls, filters and tabs work, tapping an item opens it in a detail phone, and a colour-shade picker recolours every screen. Made for screen-recorded design reviews with clients.",
+  "author": {
+    "name": "Mohammed Ayeenuddin",
+    "url": "https://github.com/mdayeen"
+  },
+  "homepage": "https://github.com/mdayeen/phone-mockup-board",
+  "repository": "https://github.com/mdayeen/phone-mockup-board",
+  "license": "MIT",
+  "keywords": ["mockup", "ui", "ux", "mobile", "design-review", "prototype", "html", "agent-skills"]
+}

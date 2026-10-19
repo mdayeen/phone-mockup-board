@@ -1,0 +1,15 @@
+{
+  "name": "mdayeen",
+  "description": "Design and prototyping skills by Mohammed Ayeenuddin",
+  "owner": {
+    "name": "Mohammed Ayeenuddin",
+    "url": "https://github.com/mdayeen"
+  },
+  "plugins": [
+    {
+      "name": "phone-mockup-board",
+      "source": "./",
+      "description": "Interactive side-by-side phone mockups for screen-recorded client design reviews"
+    }
+  ]
+}

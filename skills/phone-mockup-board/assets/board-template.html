@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!-- phone-mockup-board template · MIT License · edit CONFIG in the script, the board text, and the render functions -->
+<title>Brand · App Screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  /* the shade picker overwrites --p, --p-ink, --p-deep, --p-soft and --p-tint at runtime */
+  --p:#f39ab3; --p-ink:#4a1626; --p-deep:#b23c66; --p-soft:#fdeef3; --p-tint:#fbd6e1;
+  --bg:#ffffff; --surface:#f6f4f5; --line:#ece8ea; --ink:#231a1e; --soft:#76696f;
+  --board:#faf7f8;
+  --note:#2e8b57; --note-soft:#e6f4ea;
+  --font:"Figtree","Segoe UI",system-ui,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--board)}
+.board{background:var(--board);color:var(--ink);font-family:var(--font);min-height:100vh;padding:40px max(16px,3vw,env(safe-area-inset-left,0px)) 80px}
+h1,h2,h3,h4,p{margin:0}
+a{color:inherit}
+img{display:block;width:100%;height:100%;object-fit:cover}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--p-deep);outline-offset:2px;border-radius:10px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* ---------- board chrome ---------- */
+.top{max-width:1240px;margin:0 auto 34px;display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between}
+.top h1{font-size:clamp(1.75rem,1.2rem + 1.8vw,2.5rem);font-weight:800;letter-spacing:-.025em}
+.top p{color:var(--soft);margin-top:8px;max-width:62ch;line-height:1.5}
+.shades{display:flex;align-items:center;gap:8px;background:#fff;padding:8px 12px;border-radius:999px}
+.shades span{font-weight:700;font-size:.875rem;color:var(--soft);margin-right:4px}
+.shades button{width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px transparent}
+.shades button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.row-title{max-width:1240px;margin:44px auto 18px;font-size:1.25rem;font-weight:800}
+.row{max-width:1240px;margin:0 auto;display:flex;flex-wrap:wrap;gap:36px 32px;justify-content:center}
+.slot{display:flex;flex-direction:column;align-items:center;gap:14px;width:360px;max-width:100%}
+.slot .cap{font-size:.9375rem;color:var(--soft);line-height:1.45;text-align:center;max-width:34ch}
+.slot .cap b{color:var(--ink);display:block;font-size:1rem}
+.foot{max-width:900px;margin:56px auto 0;text-align:center;color:var(--soft);font-size:.8125rem;line-height:1.5}
+
+/* ---------- phone ---------- */
+.phone{width:360px;max-width:100%;height:760px;background:#fff;border-radius:46px;padding:9px;box-shadow:0 30px 60px -30px rgba(80,40,60,.35),0 0 0 1px #ece6e9}
+.screen{position:relative;height:100%;border-radius:38px;overflow:hidden;background:var(--bg)}
+.scroll{height:100%;overflow-y:auto;scrollbar-width:none;padding-bottom:100px}
+.scroll::-webkit-scrollbar{display:none}
+.status{display:flex;justify-content:space-between;align-items:center;padding:14px 26px 6px;font-weight:700;font-size:.875rem;position:relative;z-index:2}
+.status i{display:inline-flex;gap:5px}
+.status i b{display:block;width:16px;height:9px;border-radius:3px;background:currentColor;opacity:.85}
+.status i b:first-child{width:14px;opacity:.5}
+.status.light{color:#fff}
+.pad{padding-inline:18px}
+
+/* ---------- components ---------- */
+.hello{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px}
+.who{display:flex;align-items:center;gap:10px}
+.av{width:42px;height:42px;border-radius:50%;background:var(--p);color:var(--p-ink);display:grid;place-items:center;font-weight:800;font-size:.875rem;flex:none}
+.hello small{display:block;color:var(--soft);font-size:.8125rem}
+.hello b{font-size:.9375rem}
+.ibtn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;display:grid;place-items:center;flex:none;color:var(--ink)}
+.ibtn:hover{background:var(--p-soft)}
+.ibtn svg{width:20px;height:20px}
+.big{font-size:1.75rem;font-weight:800;letter-spacing:-.025em;line-height:1.12;margin-top:14px}
+.search{display:flex;align-items:center;gap:8px;margin-top:16px}
+.sfield{flex:1;display:flex;align-items:center;gap:8px;background:var(--surface);border-radius:16px;padding:0 14px;height:50px;min-width:0}
+.sfield svg{width:19px;height:19px;color:var(--soft);flex:none}
+.sfield input{border:0;background:transparent;font:500 .9375rem var(--font);color:var(--ink);width:100%;min-width:0;outline:none}
+.sfield input::placeholder{color:var(--soft)}
+.fbtn{width:50px;height:50px;border-radius:16px;border:0;background:var(--p);color:var(--p-ink);display:grid;place-items:center;flex:none}
+.fbtn svg{width:20px;height:20px}
+.sh{display:flex;justify-content:space-between;align-items:center;margin:24px 0 12px}
+.sh h3{font-size:1.125rem;font-weight:800}
+.sh .lnk{font-size:.8125rem;font-weight:700;color:var(--p-deep);text-decoration:none;background:none;border:0;padding:0}
+.hs{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;margin-inline:-18px;padding-inline:18px;scroll-snap-type:x mandatory}
+.hs::-webkit-scrollbar{display:none}
+.hs > *{scroll-snap-align:start;flex:none}
+.chip{border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:700;font-size:.8125rem;padding:9px 14px;border-radius:999px;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.chip .mini{width:22px;height:22px;border-radius:50%;overflow:hidden}
+.chip[aria-pressed="true"]{background:var(--p);border-color:var(--p);color:var(--p-ink)}
+.meta{display:flex;gap:10px;color:var(--soft);font-size:.75rem;font-weight:600;align-items:center;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;font-weight:800;font-size:.8125rem;padding:10px 12px;background:var(--p);color:var(--p-ink);text-decoration:none;display:inline-flex;justify-content:center;align-items:center;gap:6px}
+.btn:active{transform:scale(.96)}
+.btn.soft{background:var(--surface);color:var(--ink)}
+.badge{position:absolute;left:10px;top:10px;background:rgba(255,255,255,.95);color:var(--ink);font-size:.6875rem;font-weight:800;padding:5px 9px;border-radius:999px}
+.ph{position:relative;overflow:hidden;background:var(--p-soft)}
+.ph .ini{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:2rem;color:var(--p-deep)} /* fallback when an item has no image */
+.label{font-size:.6875rem;color:var(--soft);font-weight:600}
+.pill{font-size:.6875rem;font-weight:800;padding:4px 8px;border-radius:999px;background:var(--p-soft);color:var(--p-deep)}
+.pill.note{background:var(--note-soft);color:var(--note)}
+
+/* bottom bars */
+.nav{position:absolute;left:0;right:0;bottom:0;background:#fff;display:flex;justify-content:space-around;align-items:center;padding:10px 12px 22px;border-top:1px solid var(--line)}
+.nav button{border:0;background:none;display:grid;justify-items:center;gap:3px;color:var(--soft);font-size:.6875rem;font-weight:700;padding:6px 10px;border-radius:999px}
+.nav svg{width:22px;height:22px}
+.nav button.on{color:var(--p-deep)}
+.nav.pillbar button.on{background:var(--p-soft);grid-auto-flow:column;gap:6px;padding:10px 16px;font-size:.8125rem}
+.nav.filled button.on{color:var(--p-ink)}
+.nav.filled button.on svg{background:var(--p);border-radius:14px;padding:9px;width:42px;height:42px;margin:-10px 0 -2px}
+.nav.float{left:14px;right:14px;bottom:14px;border:0;border-radius:24px;padding:10px;box-shadow:0 12px 30px -12px rgba(80,40,60,.35)}
+.nav.float button span{display:none}
+.nav.float button.on{background:var(--p);color:var(--p-ink);padding:10px 14px}
+
+/* option A */
+.tiles6{display:flex;gap:14px}
+.tile6{display:grid;justify-items:center;gap:6px;border:0;background:none;font-size:.75rem;font-weight:700;color:var(--ink);width:62px}
+.tile6 i{width:60px;height:60px;border-radius:20px;overflow:hidden;background:var(--surface);padding:4px;display:block}
+.tile6 i .ph{border-radius:16px;height:100%}
+.tile6[aria-pressed="true"] i{background:var(--p)}
+.acard{width:236px;border:1px solid var(--line);border-radius:22px;padding:10px;background:#fff}
+.acard .ph{height:136px;border-radius:16px}
+.acard h4{margin:10px 2px 6px;font-size:.9375rem;font-weight:800;line-height:1.25}
+.acard .meta{margin:0 2px 10px}
+.acard .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rows{display:grid;gap:10px}
+.rowi{display:grid;grid-template-columns:58px 1fr auto;gap:12px;align-items:center;background:var(--surface);border-radius:18px;padding:8px;text-decoration:none}
+.rowi .ph{width:58px;height:58px;border-radius:14px}
+.rowi b{font-size:.875rem;display:block}
+.rowi small{color:var(--soft);font-size:.75rem;font-weight:600}
+/* option B */
+.tall{width:200px;text-decoration:none}
+.tall .ph{height:250px;border-radius:24px}
+.tall h4{margin:10px 2px 3px;font-size:.9375rem;font-weight:800}
+.tall p{font-size:.75rem;color:var(--soft);margin:0 2px}
+.util{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center;border:1px solid var(--line);border-radius:18px;padding:8px 12px 8px 8px}
+.util .ph{width:56px;height:56px;border-radius:14px}
+.util b{font-size:.875rem;display:block}
+.util .r{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:3px}
+.util a{font-size:.75rem;font-weight:800;color:var(--p-deep)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g2 a{text-decoration:none}
+.g2 .ph{aspect-ratio:1;border-radius:18px}
+.g2 h4{font-size:.8125rem;font-weight:800;margin:7px 2px 2px}
+/* option C */
+.hero{position:relative;display:block;height:330px;margin-top:-42px;text-decoration:none}
+.hero .ph{height:100%}
+.hero .shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,10,15,.72) 10%,rgba(20,10,15,0) 60%)}
+.hero .tx{position:absolute;left:20px;right:84px;bottom:58px;color:#fff}
+.hero .tx small{font-weight:800;font-size:.75rem;background:var(--p);color:var(--p-ink);padding:4px 9px;border-radius:999px}
+.hero .tx h2{font-size:1.625rem;font-weight:800;letter-spacing:-.02em;margin-top:8px;line-height:1.1}
+.hero .go{position:absolute;right:20px;bottom:60px;width:52px;height:52px;border-radius:50%;background:#fff;display:grid;place-items:center}
+.hero .go svg{width:18px;height:18px;fill:var(--p-deep);margin-left:3px}
+.sheet{position:relative;margin-top:-36px;background:#fff;border-radius:28px 28px 0 0;padding:20px 18px 0}
+.tiles4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile4{position:relative;height:78px;border-radius:18px;background:var(--p-soft);overflow:hidden;border:0;text-align:left;padding:12px;font-weight:800;font-size:.875rem;color:var(--ink)}
+.tile4 .ph{position:absolute;right:-14px;bottom:-14px;width:72px;height:72px;border-radius:50%}
+.tile4 small{display:block;font-weight:600;color:var(--soft);font-size:.6875rem}
+.tile4[aria-pressed="true"]{background:var(--p);color:var(--p-ink)}
+.tile4[aria-pressed="true"] small{color:inherit}
+/* detail */
+.dhero{position:relative;height:320px}
+.dhero .ph{height:100%}
+.dhero .tb{position:absolute;left:16px;right:16px;top:46px;display:flex;justify-content:space-between;z-index:2}
+.glass{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;border:0;color:var(--ink)}
+.glass svg{width:19px;height:19px}
+.dsheet{position:relative;margin-top:-30px;background:#fff;border-radius:28px 28px 0 0;padding:22px 18px 20px}
+.dsheet h2{font-size:1.4375rem;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.dsheet .desc{color:var(--soft);font-size:.875rem;line-height:1.5;margin-top:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.stats div{background:var(--surface);border-radius:16px;padding:10px;text-align:center}
+.stats b{display:block;font-size:.875rem}
+.stats small{font-size:.6875rem;color:var(--soft);font-weight:600}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border-radius:14px;padding:4px;margin-top:18px}
+.seg button{border:0;background:none;font-weight:800;font-size:.8125rem;padding:10px;border-radius:11px;color:var(--soft)}
+.seg button[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 2px 8px -4px rgba(0,0,0,.2)}
+.stepper-row{display:flex;justify-content:space-between;align-items:center;margin:16px 0 8px}
+.step{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:999px;padding:4px}
+.step button{width:30px;height:30px;border-radius:50%;border:0;background:#fff;font-weight:800;font-size:1rem}
+.step span{font-weight:800;font-size:.875rem;min-width:64px;text-align:center}
+.vals{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.vals li{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:14px;padding:9px 12px;font-size:.875rem;font-weight:600}
+.vals li i{width:30px;height:30px;border-radius:10px;background:var(--p-soft);color:var(--p-deep);display:grid;place-items:center;font-style:normal;font-weight:800;font-size:.8125rem;flex:none}
+.vals li em{margin-left:auto;font-style:normal;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.steps{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:10px}
+.steps li{display:grid;grid-template-columns:30px 1fr;gap:10px;font-size:.875rem;line-height:1.45}
+.steps li span{width:30px;height:30px;border-radius:10px;background:var(--p-soft);color:var(--p-deep);display:grid;place-items:center;font-weight:800;font-size:.8125rem}
+.tip{margin-top:18px;background:var(--p-soft);border-radius:18px;padding:14px;font-size:.875rem;line-height:1.45}
+.tip b{display:block;color:var(--p-deep);font-size:.8125rem;margin-bottom:3px}
+.pairs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pairs a{display:flex;gap:8px;align-items:center;background:var(--surface);border-radius:14px;padding:6px;text-decoration:none;font-size:.8125rem;font-weight:800}
+.pairs .ph{width:40px;height:40px;border-radius:10px;flex:none}
+.cta{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;background:var(--p);color:var(--p-ink);border-radius:999px;padding:6px 6px 6px 22px;font-weight:800;font-size:.9375rem;border:0;box-shadow:0 14px 28px -12px rgba(120,40,80,.5);white-space:nowrap;z-index:3;text-decoration:none}
+.cta i{width:40px;height:40px;border-radius:50%;background:#fff;display:grid;place-items:center}
+.cta svg{width:14px;height:14px;fill:var(--p-deep);margin-left:2px}
+/* list */
+.lhead{display:flex;align-items:center;gap:12px;margin-top:8px}
+.lhead h2{font-size:1.25rem;font-weight:800;flex:1}
+.lhead span{font-size:.8125rem;color:var(--soft);font-weight:700}
+.sortrow{display:flex;gap:8px;margin-top:12px;align-items:center;font-size:.75rem;font-weight:700;color:var(--soft)}
+.sortrow select{border:1px solid var(--line);border-radius:999px;padding:7px 10px;font:700 .75rem var(--font);color:var(--ink);background:#fff}
+.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;margin-top:14px}
+.lc{text-decoration:none;border:1px solid var(--line);border-radius:20px;padding:6px 6px 10px}
+.lc .ph{aspect-ratio:1;border-radius:15px}
+.lc h4{font-size:.8125rem;font-weight:800;margin:8px 4px 3px;line-height:1.25}
+.lc .meta{margin:0 4px}
+.empty{grid-column:1/-1;text-align:center;color:var(--soft);font-size:.875rem;padding:24px 8px;background:var(--surface);border-radius:18px}
+@media (max-width:420px){.phone{height:720px;border-radius:40px}.screen{border-radius:32px}}
+</style>
+</head>
+<body>
+<div class="board" id="board">
+  <header class="top">
+    <div>
+      <!-- EDIT: board title and one-line instructions for the client -->
+      <h1>Little Kitchen, app screens</h1>
+      <p>Three home screen options, then the item page and the full list. Everything inside the phones is tappable: tap any item to open it in the item screen.</p>
+    </div>
+    <div class="shades" role="group" aria-label="Colour shade" id="shades"><span>Colour</span></div>
+  </header>
+
+  <!-- EDIT: row titles and captions. Keep one caption per phone, naming the option and what it does differently. -->
+  <h2 class="row-title">Home: three options</h2>
+  <div class="row">
+    <div class="slot"><div class="phone"><div class="screen" id="homeA"></div></div><p class="cap"><b>A · Act now</b>Greeting, search with filter, category tiles, cards with two actions, today's list.</p></div>
+    <div class="slot"><div class="phone"><div class="screen" id="homeB"></div></div><p class="cap"><b>B · Popular</b>Photo chips, tall popular cards, a utility row, a 2×2 weekly grid.</p></div>
+    <div class="slot"><div class="phone"><div class="screen" id="homeC"></div></div><p class="cap"><b>C · Hero first</b>The newest item fills the top, search sits on a sheet over it, then tiles and tall cards.</p></div>
+  </div>
+  <h2 class="row-title">Inside an item</h2>
+  <div class="row">
+    <div class="slot"><div class="phone"><div class="screen" id="detail"></div></div><p class="cap"><b>Item page</b>Hero photo, stats, tabs, a stepper that rescales every value, a tip, related items, a floating action.</p></div>
+    <div class="slot"><div class="phone"><div class="screen" id="list"></div></div><p class="cap"><b>Full list</b>Chips with counts, a sort control, a two-column grid.</p></div>
+  </div>
+
+  <!-- EDIT: say what is sample content, credit photos, and name anything left out of scope -->
+  <p class="foot">Mockup for review. Names, times and quantities are samples. Images are placeholders until the project's own photos arrive.</p>
+</div>
+
+<script>
+(() => {
+  /* ================= EDIT THIS ================= */
+  const CONFIG = {
+    brand: { name: "Little Kitchen", initials: "LK", greeting: "Good evening", question: "What's cooking<br>today?", link: "https://www.youtube.com/" },
+    shades: [ // id, label, primary, ink on primary, deep (text on white), soft tint, stronger tint
+      { id:"blush", label:"Blush", p:"#f39ab3", ink:"#4a1626", deep:"#b23c66", soft:"#fdeef3", tint:"#fbd6e1" },
+      { id:"rose",  label:"Rose",  p:"#e25d85", ink:"#ffffff", deep:"#b52d58", soft:"#fde8ef", tint:"#f8c9d7" },
+      { id:"berry", label:"Berry", p:"#cf2f68", ink:"#ffffff", deep:"#b02556", soft:"#ffe9f0", tint:"#ffd0df" }
+    ],
+    tabs: ["Home", "Search", "Browse", "More"],
+    detailTabs: ["Ingredients", "Steps"],
+    stepper: { label: "Serves", unit: "people", min: 1, max: 20 },
+    stats: ["Time", "Level", "Video"],
+    cta: "Watch video",
+    categories: ["All", "Mains", "Sides", "Sweets", "Drinks"],
+    utility: [ { name: "Cast-iron skillet", tag: "Affiliate link · Store" }, { name: "Spice tin set", tag: "Affiliate link · Store" } ],
+    items: [
+      { id:"curry", name:"Weeknight chickpea curry", cat:"Mains", mins:35, time:"35 min", level:"Easy", media:"8 min", img:"", desc:"Chickpeas, tomato and coconut in one pan.", base:4,
+        values:[["Chickpeas",2,"cans"],["Coconut milk",1,"can"],["Tomatoes",400,"g"],["Onion",1,""]], steps:["Soften the onion.","Add spices and tomatoes.","Simmer with chickpeas and coconut."], tip:"Mash a few chickpeas to thicken the sauce.", pair:["rice","lassi"] },
+      { id:"rice", name:"Jeera rice", cat:"Sides", mins:20, time:"20 min", level:"Easy", media:"4 min", img:"", desc:"Fluffy basmati tempered with cumin.", base:4,
+        values:[["Basmati rice",1.5,"cups"],["Cumin seeds",1,"tsp"],["Ghee",1,"tbsp"]], steps:["Rinse the rice.","Temper cumin in ghee.","Cook covered for 12 minutes."], tip:"Rest five minutes before fluffing.", pair:["curry","lassi"] },
+      { id:"cake", name:"Olive oil cake", cat:"Sweets", mins:55, time:"55 min", level:"Medium", media:"9 min", img:"", desc:"A soft, lemony loaf that keeps for days.", base:8,
+        values:[["Flour",2,"cups"],["Olive oil",0.75,"cup"],["Sugar",1,"cup"],["Eggs",3,""]], steps:["Whisk the wet ingredients.","Fold in the flour.","Bake 45 minutes at 180°C."], tip:"Zest the lemon straight into the sugar.", pair:["lassi","rice"] },
+      { id:"lassi", name:"Mango lassi", cat:"Drinks", mins:5, time:"5 min", level:"Easy", media:"2 min", img:"", desc:"Mango, yoghurt and a pinch of cardamom.", base:2,
+        values:[["Mango pulp",1,"cup"],["Yoghurt",1,"cup"],["Cardamom",1,"pinch"]], steps:["Blend everything until smooth."], tip:"Chill the glasses first.", pair:["curry","cake"] },
+      { id:"stew", name:"Slow lamb stew", cat:"Mains", mins:180, time:"3 hr", level:"Slow", media:"12 min", img:"", desc:"Lamb shoulder braised until it falls apart.", base:6,
+        values:[["Lamb shoulder",1,"kg"],["Carrots",3,""],["Stock",1,"litre"]], steps:["Brown the lamb.","Add vegetables and stock.","Braise low for three hours."], tip:"Make it a day ahead; it gets better.", pair:["rice","cake"] },
+      { id:"salad", name:"Crunchy slaw", cat:"Sides", mins:15, time:"15 min", level:"Easy", media:"3 min", img:"", desc:"Cabbage, carrot and a sharp lime dressing.", base:4,
+        values:[["Cabbage",0.5,"head"],["Carrot",2,""],["Lime",1,""]], steps:["Shred the vegetables.","Toss with the dressing."], tip:"Salt the cabbage for ten minutes first.", pair:["stew","curry"] }
+    ]
+  };
+  /* ============================================= */
+
+  const C = CONFIG, R = C.items;
+  const byId = id => R.find(r => r.id === id);
+  const esc = s => String(s).replace(/[<>&"]/g, "");
+  const ic = {
+    search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
+    filter:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M7 12h10M10 17h4"/></svg>',
+    play:'<svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg>',
+    back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+    share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 13v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6"/></svg>',
+    bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>',
+    tabs:[
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg>',
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>',
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>'
+    ]
+  };
+
+  /* shared pieces */
+  const pic = (r, extra = "") => `<div class="ph" ${extra}>${r && r.img ? `<img src="${r.img}" alt="${esc(r.name)}">` : `<span class="ini" aria-hidden="true">${esc((r ? r.name : "?")[0])}</span>`}`;
+  const catPic = c => pic(R.find(x => x.cat === c) || R[0]) + "</div>";
+  const status = cls => `<div class="status ${cls || ""}"><span>9:41</span><i><b></b><b></b></i></div>`;
+  const searchRow = () => `<div class="search"><label class="sfield">${ic.search}<input type="search" placeholder="Search…" aria-label="Search" data-search></label><button class="fbtn" type="button" aria-label="Filters" data-go="list">${ic.filter}</button></div>`;
+  const nav = (style, active = 0) => `<nav class="nav ${style}" aria-label="Tabs">${C.tabs.map((t, i) => `<button type="button" class="${i === active ? "on" : ""}" ${i ? 'data-go="list"' : ""}>${ic.tabs[i % ic.tabs.length]}<span>${t}</span></button>`).join("")}</nav>`;
+  const open = r => `data-open="${r.id}" href="#${r.id}"`;
+  const meta = r => `<p class="meta"><span>${r.time}</span><span>${r.cat}</span></p>`;
+  const count = c => c === "All" ? R.length : R.filter(r => r.cat === c).length;
+  const filterBy = c => c === "All" || !c ? R : R.filter(r => r.cat === c);
+  const hello = sub => `<div class="hello"><div class="who"><span class="av">${C.brand.initials}</span><div><small>${sub}</small><b>${C.brand.name}</b></div></div><a class="ibtn" href="${C.brand.link}" target="_blank" rel="noopener" aria-label="Updates">${ic.bell}</a></div>`;
+
+  /* ===== screens: rewrite these to match the user's flow ===== */
+  const state = { a:"All", b:"All", c:"", cur:R[0].id, qty:0, tab:0, l:"All", sort:"pick" };
+
+  const homeA = () => {
+    const list = filterBy(state.a);
+    return `<div class="scroll">${status()}<div class="pad">${hello(C.brand.greeting)}
+      <h2 class="big">${C.brand.question}</h2>${searchRow()}
+      <div class="sh"><h3>Categories</h3><button class="lnk" type="button" data-go="list">See all</button></div>
+      <div class="hs tiles6">${C.categories.map(c => `<button class="tile6" type="button" data-set="a" data-val="${c}" aria-pressed="${state.a === c}"><i>${catPic(c)}</i>${c}</button>`).join("")}</div>
+      <div class="sh"><h3>Recommended</h3><button class="lnk" type="button" data-go="list">See all</button></div>
+      <div class="hs">${list.map(r => `<div class="acard">${pic(r)}<span class="badge">${r.media}</span></div><h4>${esc(r.name)}</h4>${meta(r)}<div class="acts"><a class="btn" ${open(r)}>Start</a><a class="btn soft" ${open(r)}>Details</a></div></div>`).join("") || `<p class="meta">Nothing here yet.</p>`}</div>
+      <div class="sh"><h3>Today</h3></div>
+      <div class="rows">${R.slice(0, 3).map((r, i) => `<a class="rowi" ${open(r)}>${pic(r)}</div><span><b>${esc(r.name)}</b><small>${r.time}</small></span><span class="pill">${["Lunch","Dinner","Treat"][i]}</span></a>`).join("")}</div>
+    </div></div>${nav("pillbar")}`;
+  };
+  const homeB = () => {
+    const list = filterBy(state.b);
+    return `<div class="scroll">${status()}<div class="pad">${hello("Welcome back")}
+      <h2 class="big">${C.brand.question}</h2>${searchRow()}
+      <div class="hs" style="margin-top:14px;gap:8px">${C.categories.map(c => `<button class="chip" type="button" data-set="b" data-val="${c}" aria-pressed="${state.b === c}">${c === "All" ? "" : `<span class="mini">${catPic(c)}</span>`}${c}</button>`).join("")}</div>
+      <div class="sh"><h3>Popular this week</h3><button class="lnk" type="button" data-go="list">See all</button></div>
+      <div class="hs">${list.map(r => `<a class="tall" ${open(r)}>${pic(r)}<span class="badge">${r.media}</span></div><h4>${esc(r.name)}</h4><p>${r.time} · ${r.level}</p></a>`).join("") || `<p class="meta">Nothing here yet.</p>`}</div>
+      <div class="sh"><h3>Useful extras</h3></div>
+      <div class="rows">${C.utility.map(u => `<div class="util">${pic({name:u.name})}</div><div><b>${esc(u.name)}</b><div class="r"><span class="label">${esc(u.tag)}</span><a href="#extra">See it</a></div></div></div>`).join("")}</div>
+      <div class="sh"><h3>This week</h3></div>
+      <div class="g2">${R.slice(-4).map(r => `<a ${open(r)}>${pic(r)}<span class="badge">${r.media}</span></div><h4>${esc(r.name)}</h4>${meta(r)}</a>`).join("")}</div>
+    </div></div>${nav("filled")}`;
+  };
+  const homeC = () => {
+    const h = R[R.length - 2], list = state.c ? filterBy(state.c) : R.slice(0, 5);
+    return `<div class="scroll">${status("light")}
+      <a class="hero" ${open(h)}>${pic(h)}</div><span class="shade"></span><span class="tx"><small>New · ${h.media}</small><h2>${esc(h.name)}</h2></span><span class="go">${ic.play}</span></a>
+      <div class="sheet"><h2 class="big" style="margin-top:0;font-size:1.5rem">${C.brand.question.replace("<br>", " ")}</h2>${searchRow()}
+        <div class="sh"><h3>Browse</h3><button class="lnk" type="button" data-go="list">All</button></div>
+        <div class="tiles4">${C.categories.slice(1, 5).map(c => `<button class="tile4" type="button" data-set="c" data-val="${state.c === c ? "" : c}" aria-pressed="${state.c === c}">${c}<small>${count(c)} item${count(c) === 1 ? "" : "s"}</small>${catPic(c)}</button>`).join("")}</div>
+        <div class="sh"><h3>${state.c || "Recommended"}</h3></div>
+        <div class="hs">${list.map(r => `<a class="tall" style="width:168px" ${open(r)}>${pic(r, 'style="height:210px"')}<span class="badge">${r.media}</span></div><h4>${esc(r.name)}</h4>${meta(r)}</a>`).join("")}</div>
+      </div></div>${nav("float")}`;
+  };
+  const frac = x => { const w = Math.floor(x), f = x - w, m = {0.25:"¼",0.5:"½",0.75:"¾"}; const k = Object.keys(m).find(k => Math.abs(f - k) < .07); if (k) return (w || "") + m[k]; return f < .07 ? String(w) : String(Math.round(x * 10) / 10); };
+  const detail = () => {
+    const r = byId(state.cur); if (!state.qty) state.qty = r.base;
+    const k = state.qty / r.base;
+    return `<div class="scroll" id="dscroll"><div class="dhero">${pic(r)}</div><div class="tb"><button class="glass" type="button" aria-label="Back" data-back>${ic.back}</button><button class="glass" type="button" aria-label="Share">${ic.share}</button></div></div>
+      <div class="dsheet"><h2>${esc(r.name)}</h2><p class="desc">${esc(r.desc)}</p>
+        <div class="stats"><div><b>${r.time}</b><small>${C.stats[0]}</small></div><div><b>${r.level}</b><small>${C.stats[1]}</small></div><div><b>${r.media}</b><small>${C.stats[2]}</small></div></div>
+        <div class="seg" role="tablist">${C.detailTabs.map((t, i) => `<button role="tab" type="button" data-tab="${i}" aria-selected="${state.tab === i}">${t}</button>`).join("")}</div>
+        ${state.tab === 0 ? `<div class="stepper-row"><b>${C.stepper.label}</b><div class="step"><button type="button" data-qty="-1" aria-label="Less">−</button><span>${state.qty} ${C.stepper.unit}</span><button type="button" data-qty="1" aria-label="More">+</button></div></div>
+          <ul class="vals">${r.values.map(([n, q, u]) => `<li><i>${esc(n[0])}</i>${esc(n)}<em>${frac(q * k)}${u ? " " + u : ""}</em></li>`).join("")}</ul>`
+          : `<ol class="steps">${r.steps.map((s, i) => `<li><span>${i + 1}</span>${esc(s)}</li>`).join("")}</ol>`}
+        <div class="tip"><b>Tip</b>${esc(r.tip)}</div>
+        <div class="sh"><h3>Goes well with</h3></div>
+        <div class="pairs">${r.pair.map(byId).filter(Boolean).map(p => `<a ${open(p)}>${pic(p)}</div>${esc(p.name)}</a>`).join("")}</div>
+      </div></div>
+      <a class="cta" href="${C.brand.link}" target="_blank" rel="noopener">${C.cta}<i>${ic.play}</i></a>`;
+  };
+  const list = () => {
+    let items = filterBy(state.l).slice();
+    if (state.sort === "quick") items.sort((a, b) => a.mins - b.mins);
+    if (state.sort === "slow") items.sort((a, b) => b.mins - a.mins);
+    if (state.sort === "az") items.sort((a, b) => a.name.localeCompare(b.name));
+    return `<div class="scroll">${status()}<div class="pad">
+      <div class="lhead"><button class="ibtn" type="button" aria-label="Back" data-back>${ic.back}</button><h2>All items</h2><span>${items.length}</span></div>${searchRow()}
+      <div class="hs" style="margin-top:14px;gap:8px">${C.categories.map(c => `<button class="chip" type="button" data-set="l" data-val="${c}" aria-pressed="${state.l === c}">${c} <span style="opacity:.7">${count(c)}</span></button>`).join("")}</div>
+      <div class="sortrow"><label for="sortL">Sort</label><select id="sortL" data-sort>${[["pick","Our picks"],["quick","Quickest first"],["slow","Longest first"],["az","A to Z"]].map(([v, l]) => `<option value="${v}" ${state.sort === v ? "selected" : ""}>${l}</option>`).join("")}</select></div>
+      <div class="lgrid">${items.map(r => `<a class="lc" ${open(r)}>${pic(r)}<span class="badge">${r.media}</span></div><h4>${esc(r.name)}</h4>${meta(r)}</a>`).join("") || `<p class="empty">Nothing in ${esc(state.l)} yet.</p>`}</div>
+    </div></div>${nav("pillbar", 2)}`;
+  };
+
+  const SCREENS = { homeA, homeB, homeC, detail, list };
+  const render = (...ids) => (ids.length ? ids : Object.keys(SCREENS)).forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = SCREENS[id](); });
+  const show = id => document.getElementById(id).scrollIntoView({ behavior: "smooth", block: "center" });
+
+  /* events: one delegated handler for every phone */
+  const screenOf = { a:"homeA", b:"homeB", c:"homeC", l:"list" };
+  document.addEventListener("click", e => {
+    let b;
+    if ((b = e.target.closest("[data-open]"))) {
+      e.preventDefault(); state.cur = b.dataset.open; state.qty = 0; state.tab = 0; render("detail");
+      const ds = document.getElementById("dscroll"); if (ds) ds.scrollTop = 0;
+      if (!b.closest("#detail")) show("detail"); return;
+    }
+    if ((b = e.target.closest("[data-set]"))) { state[b.dataset.set] = b.dataset.val; render(screenOf[b.dataset.set]); return; }
+    if ((b = e.target.closest("[data-tab]"))) { state.tab = +b.dataset.tab; render("detail"); return; }
+    if ((b = e.target.closest("[data-qty]"))) { state.qty = Math.min(C.stepper.max, Math.max(C.stepper.min, state.qty + +b.dataset.qty)); render("detail"); return; }
+    if ((b = e.target.closest("[data-go]"))) { show(b.dataset.go); return; }
+    if ((b = e.target.closest("[data-back]"))) { show("homeA"); return; }
+  });
+  document.addEventListener("change", e => { if (e.target.matches("[data-sort]")) { state.sort = e.target.value; render("list"); } });
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Enter" || !e.target.matches("[data-search]")) return;
+    const t = e.target.value.trim().toLowerCase(); if (!t) return;
+    const hit = R.find(r => (r.name + " " + r.cat + " " + r.values.map(v => v[0]).join(" ")).toLowerCase().includes(t));
+    if (hit) { state.cur = hit.id; state.qty = 0; state.tab = 0; render("detail"); show("detail"); }
+  });
+
+  /* shade picker */
+  const board = document.getElementById("board"), shadesEl = document.getElementById("shades");
+  const setShade = id => {
+    const s = C.shades.find(x => x.id === id) || C.shades[0];
+    [["--p", s.p], ["--p-ink", s.ink], ["--p-deep", s.deep], ["--p-soft", s.soft], ["--p-tint", s.tint]].forEach(([k, v]) => board.style.setProperty(k, v));
+    shadesEl.querySelectorAll("button").forEach(btn => btn.setAttribute("aria-pressed", String(btn.dataset.shade === s.id)));
+    try { localStorage.setItem("pmb-shade", s.id); } catch (err) { /* storage blocked: keep the default */ }
+  };
+  C.shades.forEach(s => { const btn = document.createElement("button"); btn.type = "button"; btn.dataset.shade = s.id; btn.style.background = s.p; btn.setAttribute("aria-label", s.label); btn.addEventListener("click", () => setShade(s.id)); shadesEl.appendChild(btn); });
+  let saved = null; try { saved = localStorage.getItem("pmb-shade"); } catch (err) { /* storage blocked */ }
+  setShade(saved || C.shades[0].id);
+  render();
+})();
+</script>
+</body>
